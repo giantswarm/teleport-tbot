@@ -1,0 +1,45 @@
+global:
+  podSecurityStandards:
+    enforced: false
+
+ciliumNetworkPolicy:
+  enabled: false
+
+image:
+  name: "giantswarm/teleport-tbot"
+registry:
+  domain: gsoci.azurecr.io
+
+teleport:
+  managementClusterName: ""
+  proxyAddr: test.teleport.giantswarm.io:443
+  teleportClusterName: test.teleport.giantswarm.io
+  teleportVersion: 14.1.1
+
+pod:
+  user:
+    id: 1000
+  group:
+    id: 1000
+
+resources:
+  limits:
+    cpu: 250m
+    memory: 500Mi
+  requests:
+    cpu: 100m
+    memory: 250Mi
+
+# Add seccomp to pod security context
+podSecurityContext:
+  seccompProfile:
+    type: RuntimeDefault
+  runAsNonRoot: true
+
+# Add seccomp to container security context
+containerSecurityContext:
+  readOnlyRootFilesystem: true
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
