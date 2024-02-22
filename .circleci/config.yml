@@ -4,103 +4,84 @@ orbs:
   architect: giantswarm/architect@5.0.0
 
 workflows:
+  version: 2
   build:
     jobs:
-      - architect/go-build:
-          name: go-build
-          binary: teleport-tbot
-          resource_class: large
+      - architect/push-to-app-catalog:
+          name: push-to-default-app-catalog
+          context: architect
+          executor: app-build-suite
+          app_catalog: "default-catalog"
+          app_catalog_test: "default-test-catalog"
+          chart: "teleport-tbot"
+          persist_chart_archive: true
           filters:
+            # Trigger the job also on git tag.
             tags:
               only: /^v.*/
 
-      - architect/push-to-registries:
+      - architect/push-to-app-catalog:
+          name: push-to-giantswarm-app-catalog
           context: architect
-          name: push-to-registries
-          requires:
-            - go-build
+          executor: app-build-suite
+          app_catalog: "giantswarm-catalog"
+          app_catalog_test: "giantswarm-test-catalog"
+          chart: "teleport-tbot"
           filters:
+            # Trigger the job also on git tag.
             tags:
               only: /^v.*/
+
       - architect/push-to-app-catalog:
-          context: "architect"
-          executor: "app-build-suite" # uncomment this if you want automatic metadata generation and helm chart linting
-          name: push-teleport-tbot-to-app-catalog
+          name: push-teleport-tbot-app-to-control-plane-app-catalog
+          context: architect
+          executor: app-build-suite
           app_catalog: "control-plane-catalog"
           app_catalog_test: "control-plane-test-catalog"
           chart: "teleport-tbot"
-          requires:
-            - push-to-registries
           filters:
+            # Trigger the job also on git tag.
             tags:
               only: /^v.*/
 
+      # deploy to aws installations (only tags)
       - architect/push-to-app-collection:
+          name: push-teleport-tbot-app-to-aws-app-collection
           context: architect
-          name: push-to-capa-app-collection
-          app_name: "teleport-tbot"
-          app_collection_repo: "capa-app-collection"
+          app_name: "teleport-tbot-app"
+          app_namespace: "kube-system"
+          app_collection_repo: "aws-app-collection"
           requires:
-            - push-teleport-tbot-to-app-catalog
-            - push-to-registries
+            - push-teleport-tbot-app-to-control-plane-app-catalog
           filters:
             branches:
               ignore: /.*/
             tags:
               only: /^v.*/
 
+      # deploy to azure installations (only tags)
       - architect/push-to-app-collection:
+          name: push-teleport-tbot-app-to-azure-app-collection
           context: architect
-          name: push-to-cloud-director-app-collection
-          app_name: "teleport-tbot"
-          app_collection_repo: "cloud-director-app-collection"
+          app_name: "teleport-tbot-app"
+          app_namespace: "kube-system"
+          app_collection_repo: "azure-app-collection"
           requires:
-            - push-teleport-tbot-to-app-catalog
-            - push-to-registries
+            - push-teleport-tbot-app-to-control-plane-app-catalog
           filters:
             branches:
               ignore: /.*/
             tags:
               only: /^v.*/
 
-      - architect/push-to-app-collection:
-          context: architect
-          name: push-to-capz-app-collection
-          app_name: "teleport-tbot"
-          app_collection_repo: "capz-app-collection"
-          requires:
-            - push-teleport-tbot-to-app-catalog
-            - push-to-registries
+      - architect/run-tests-with-ats:
+          name: execute chart tests
+          app-test-suite_version: "v0.4.1"
+          app-test-suite_container_tag: "0.4.1"
           filters:
+            # Do not trigger the job on merge to main.
             branches:
-              ignore: /.*/
-            tags:
-              only: /^v.*/
-
-      - architect/push-to-app-collection:
-          context: architect
-          name: push-to-gcp-app-collection
-          app_name: "teleport-tbot"
-          app_collection_repo: "gcp-app-collection"
+              ignore:
+                - main
           requires:
-            - push-teleport-tbot-to-app-catalog
-            - push-to-registries
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v.*/
-
-      - architect/push-to-app-collection:
-          context: architect
-          name: push-to-vsphere-app-collection
-          app_name: "teleport-tbot"
-          app_collection_repo: "vsphere-app-collection"
-          requires:
-            - push-teleport-tbot-to-app-catalog
-            - push-to-registries
-          filters:
-            branches:
-              ignore: /.*/
-            tags:
-              only: /^v.*/
+            - push-to-default-app-catalog

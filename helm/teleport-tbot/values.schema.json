@@ -37,7 +37,7 @@
         "teleport": {
             "type": "object",
             "properties": {
-                "managementClusterName": {
+                "tokenName": {
                     "type": "string"
                 },
                 "proxyAddr": {
