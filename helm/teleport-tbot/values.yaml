@@ -11,7 +11,7 @@ registry:
   domain: gsoci.azurecr.io
 
 teleport:
-  managementClusterName: ""
+  tokenName: ""
   proxyAddr: test.teleport.giantswarm.io:443
   teleportClusterName: test.teleport.giantswarm.io
   teleportVersion: 14.1.1
