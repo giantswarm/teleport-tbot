@@ -81,4 +81,4 @@ workflows:
               ignore:
                 - main
           requires:
-            - push-to-giantswarm-catalog
+            - push-to-default-app-catalog
