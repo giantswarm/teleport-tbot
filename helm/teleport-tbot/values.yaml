@@ -6,7 +6,7 @@ ciliumNetworkPolicy:
   enabled: false
 
 image:
-  name: "giantswarm/teleport-tbot"
+  name: "giantswarm/teleport"
 registry:
   domain: gsoci.azurecr.io
 
