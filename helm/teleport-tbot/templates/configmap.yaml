@@ -24,4 +24,4 @@ data:
       - type: identity
         destination:
           type: kubernetes_secret
-          name: identity-output
+          name: teleport-identity-output
