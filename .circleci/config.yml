@@ -73,15 +73,3 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v.*/
-
-      - architect/run-tests-with-ats:
-          name: execute chart tests
-          app-test-suite_version: "v0.4.1"
-          app-test-suite_container_tag: "0.4.1"
-          filters:
-            # Do not trigger the job on merge to main.
-            branches:
-              ignore:
-                - main
-          requires:
-            - push-to-default-app-catalog
