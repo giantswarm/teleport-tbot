@@ -6,7 +6,7 @@ ciliumNetworkPolicy:
   enabled: false
 
 image:
-  name: "giantswarm/teleport"
+  name: "giantswarm/tbot-distroless"
 registry:
   domain: gsoci.azurecr.io
 
@@ -14,7 +14,7 @@ teleport:
   tokenName: ""
   proxyAddr: test.teleport.giantswarm.io:443
   teleportClusterName: test.teleport.giantswarm.io
-  teleportVersion: 14.1.1
+  teleportVersion: 15.1.7
 
 pod:
   user:
