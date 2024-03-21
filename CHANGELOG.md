@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Removed chart tests
+- Use standalone tbot-distroless image v15.1.7
 
 ## [0.0.4] - 2024-02-29
 
