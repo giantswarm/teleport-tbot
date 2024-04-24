@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Remove push to app catalog: default, control plane, app collections
+
 ## [0.0.5] - 2024-03-21
 
 ### Changed
