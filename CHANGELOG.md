@@ -7,9 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed cilium network policy, added `cluster` entity to egress rule.
+
 ### Changed
 
 - Remove push to app catalog: default, control plane, app collections
+- Switched to use recommended `proxy_server` over `auth_server` in tbot config.
 
 ## [0.0.5] - 2024-03-21
 
