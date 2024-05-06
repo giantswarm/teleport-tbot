@@ -18,7 +18,7 @@ data:
       type: memory
     # ensure this is configured to the address of your Teleport Proxy or
     # Auth Server. Prefer the address of the Teleport Proxy.
-    auth_server: {{ .Values.teleport.proxyAddr }}
+    proxy_server: {{ .Values.teleport.proxyAddr }}
     # outputs will be filled in during the completion of an access guide.
     outputs:
       - type: identity
