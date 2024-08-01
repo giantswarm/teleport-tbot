@@ -24,4 +24,13 @@ data:
       - type: identity
         destination:
           type: kubernetes_secret
-          name: teleport-identity-output
+          name: 
+    {{- if or (.Values.defaultOutput.enabled) (.Values.outputs) }}
+    outputs:
+    {{- if .Values.defaultOutput.enabled }}
+      - type: identity
+        destination:
+          type: kubernetes-secret
+          name: {{ .Values.defaultOutput.secretName }}
+    {{- end }}
+    {{- end }}
