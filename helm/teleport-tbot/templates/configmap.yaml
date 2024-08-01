@@ -12,6 +12,7 @@ data:
       join_method: kubernetes
       # ensure token is set to the name of the join token you created earlier
       token: bot-{{ .Values.teleport.tokenName }}
+    certificate_ttl: {{ .Values.certificate_ttl }}
     storage:
       # a memory destination is used for the bots own state since the kubernetes
       # join method does not require persistence.
@@ -20,17 +21,15 @@ data:
     # Auth Server. Prefer the address of the Teleport Proxy.
     proxy_server: {{ .Values.teleport.proxyAddr }}
     # outputs will be filled in during the completion of an access guide.
-    outputs:
-      - type: identity
-        destination:
-          type: kubernetes_secret
-          name: 
     {{- if or (.Values.defaultOutput.enabled) (.Values.outputs) }}
     outputs:
     {{- if .Values.defaultOutput.enabled }}
-      - type: identity
-        destination:
-          type: kubernetes-secret
-          name: {{ .Values.defaultOutput.secretName }}
+    - type: identity
+      destination:
+        type: kubernetes-secret
+        name: {{ .Values.defaultOutput.secretName }}
+    {{- end }}
+    {{- if .Values.outputs }}
+    {{- toYaml .Values.outputs | nindent 4}}
     {{- end }}
     {{- end }}
