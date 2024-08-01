@@ -50,7 +50,7 @@ certificate_ttl: "100h"
 defaultOutput:
   enabled: true
   # Sets the name of the Kubernetes Secret that the default output will be written to.
-  secretName: "teleport-identity-output"
+  secretName: "identity-output"
 
 # outputs(list) -- contains additional outputs to configure for the tbot agent.
 # These should be in the same format as the `outputs` field in the tbot.yaml.
