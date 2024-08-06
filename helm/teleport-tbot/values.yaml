@@ -54,9 +54,9 @@ defaultOutput:
 
 # outputs(map) -- contains additional outputs to configure for the tbot agent.
 # These should be in the same format as the `outputs` field in the tbot.yaml.
-outputs:
-  golem: ""
-  grizzly: ""
+# outputs:
+#   golem: ""
+#   grizzly: ""
 
 # outputs:
 # - type: kubernetes
