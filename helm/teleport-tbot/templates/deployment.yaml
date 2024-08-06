@@ -16,9 +16,9 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: tbot
-      annotations:
+      # annotations:
         # ConfigMap checksum, to recreate the pod on config changes.
-        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        # checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
       securityContext:
         runAsUser: {{ .Values.pod.user.id }}
