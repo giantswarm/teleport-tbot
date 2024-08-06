@@ -29,7 +29,14 @@ data:
         type: kubernetes_secret
         name: {{ .Values.defaultOutput.secretName }}
     {{- end }}
+    {{- end }}
     {{- if .Values.outputs }}
-    {{- toYaml .Values.outputs | nindent 4}}
+    {{- range $key, $value := .Values.outputs }}
+    - type: kubernetes
+      kubernetes_cluster: {{ $key }}
+      disable_exec_plugin: true
+      destination:
+        type: kubernetes-secret
+        name: {{ $key }}-kubeconfig
     {{- end }}
     {{- end }}

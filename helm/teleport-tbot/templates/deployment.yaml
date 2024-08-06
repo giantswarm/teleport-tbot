@@ -19,7 +19,6 @@ spec:
       annotations:
         # ConfigMap checksum, to recreate the pod on config changes.
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
-        rollme: {{ randAlphaNum 5 | quote }}
     spec:
       securityContext:
         runAsUser: {{ .Values.pod.user.id }}
