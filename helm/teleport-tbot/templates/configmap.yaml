@@ -36,7 +36,7 @@ data:
       kubernetes_cluster: {{ $key }}
       disable_exec_plugin: true
       destination:
-        type: kubernetes-secret
+        type: kubernetes_secret
         name: {{ $key }}-kubeconfig
     {{- end }}
     {{- end }}
