@@ -37,6 +37,6 @@ data:
       disable_exec_plugin: true
       destination:
         type: kubernetes_secret
-        name: {{ $key }}-kubeconfig
+        name: teleport-{{ $key }}-kubeconfig
     {{- end }}
     {{- end }}
