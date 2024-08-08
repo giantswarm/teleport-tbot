@@ -33,7 +33,7 @@ data:
     {{- if .Values.outputs }}
     {{- range $key, $value := .Values.outputs }}
     - type: kubernetes
-      kubernetes_cluster: {{ $key }}
+      kubernetes_cluster: {{ $value }}
       disable_exec_plugin: true
       destination:
         type: kubernetes_secret
