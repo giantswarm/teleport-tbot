@@ -33,10 +33,10 @@ data:
     {{- if .Values.outputs }}
     {{- range $key, $value := .Values.outputs }}
     - type: kubernetes
-      kubernetes_cluster: {{ $value }}
+      kubernetes_cluster: {{ $key }}
       disable_exec_plugin: true
       destination:
         type: kubernetes_secret
-        name: teleport-{{ $key }}-kubeconfig
+        name: teleport-{{ $value }}-kubeconfig
     {{- end }}
     {{- end }}
