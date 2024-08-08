@@ -54,5 +54,5 @@ defaultOutput:
 
 # outputs(map)
 # outputs:
-#   golem: ""
-#   grizzly: ""
+#   golem: "golem"
+#   golem-demo: "demo"
