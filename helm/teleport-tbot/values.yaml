@@ -51,7 +51,7 @@ certificate_ttl: "24h"
 defaultOutput:
   enabled: true
   # Sets the name of the Kubernetes Secret that the default output will be written to.
-  secretName: "identity-output"
+  secretName: "teleport-identity-output"
 
 # outputs(map)
 # outputs:
