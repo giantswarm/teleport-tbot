@@ -44,7 +44,8 @@ containerSecurityContext:
     drop:
       - ALL
 
-certificate_ttl: "8600h"
+renewal_interval: "20m"
+certificate_ttl: "24h"
 
 # Controls the default output configured for the tbot agent.
 defaultOutput:
