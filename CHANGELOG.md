@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Push to app collection (CAPZ).
+- Push to app catalog and app collection (CAPZ).
 
 ### Fixed
 
