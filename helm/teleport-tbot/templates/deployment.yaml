@@ -1,3 +1,4 @@
+{{- if .Values.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -72,3 +73,4 @@ spec:
                   # `example.teleport.sh` must be replaced with the name of
                   # your Teleport cluster.
                   audience: {{ .Values.teleport.teleportClusterName }}
+{{- end }}
