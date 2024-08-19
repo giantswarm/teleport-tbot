@@ -1,3 +1,4 @@
+{{- if .Values.enabled }}
 {{- if not .Values.global.podSecurityStandards.enforced }}
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
@@ -33,4 +34,5 @@ spec:
     - 'projected'
     - 'secret'
     - 'configMap'
+{{- end }}
 {{- end }}
