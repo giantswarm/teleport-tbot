@@ -42,8 +42,8 @@ data:
         name: teleport-{{ $value }}-kubeconfig
     {{- end }}
     {{- end }}
-      - type: identity
-        destination:
-          type: kubernetes_secret
-          name: teleport-identity-output
+    - type: identity
+      destination:
+        type: kubernetes_secret
+        name: teleport-identity-output
 {{- end }}
