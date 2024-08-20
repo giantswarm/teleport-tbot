@@ -45,3 +45,17 @@ containerSecurityContext:
   capabilities:
     drop:
       - ALL
+
+renewal_interval: "20m"
+certificate_ttl: "24h"
+
+# Controls the default output configured for the tbot agent.
+defaultOutput:
+  enabled: true
+  # Sets the name of the Kubernetes Secret that the default output will be written to.
+  secretName: "teleport-identity-output"
+
+# outputs(map)
+# outputs:
+#   golem: "golem"
+#   golem-demo: "demo"
