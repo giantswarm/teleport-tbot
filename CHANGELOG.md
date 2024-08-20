@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixes an issue in tbot config file that caused tbot pod to CrashLoopBackOff.
+
 ## [0.0.8] - 2024-08-20
 
 ### Changed
