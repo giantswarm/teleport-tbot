@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.8] - 2024-08-20
 
+### Changed
+
+- Outputs is now configurable.
+- Certificate TTL value increased and configurable.
+
 ## [0.0.7] - 2024-08-19
 
 ### Added
@@ -22,11 +27,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed potential vulnerability on `devctl` generated `github-workflows`.
-
-### Changed
-
-- Outputs is now configurable.
-- Certificate TTL value increased and configurable.
 
 ## [0.0.6] - 2024-05-06
 
