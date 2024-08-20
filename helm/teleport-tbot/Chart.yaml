@@ -1,5 +1,5 @@
 name: teleport-tbot
-version: 0.0.8
+version: 0.0.9
 description: "Teleport TBOT"
 home: "https://github.com/giantswarm/teleport-tbot"
 apiVersion: v1
