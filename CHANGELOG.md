@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Use teleport v16.1.4
+
 ## [0.0.9] - 2024-08-20
 
 ### Fixed
