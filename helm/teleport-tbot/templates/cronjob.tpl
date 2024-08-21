@@ -11,6 +11,9 @@ spec:
   jobTemplate:
     spec:
       template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: tbot
         spec:
           serviceAccountName: {{ include "resource.default.name"  . }}
           securityContext:
