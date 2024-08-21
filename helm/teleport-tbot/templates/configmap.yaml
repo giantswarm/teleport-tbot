@@ -40,10 +40,14 @@ data:
       destination:
         type: kubernetes_secret
         name: teleport-{{ $value }}-kubeconfig
+        labels:
+          app.kubernetes.io/managed-by: teleport-tbot
     {{- end }}
     {{- end }}
     - type: identity
       destination:
         type: kubernetes_secret
         name: teleport-identity-output
+        labels:
+          app.kubernetes.io/managed-by: teleport-tbot        
 {{- end }}
