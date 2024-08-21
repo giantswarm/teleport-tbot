@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add cronjob to cleanup leftover teleport-kubeconfigs for deleted clusters.
+
 ## [0.1.1] - 2024-08-21
 
 ### Added
