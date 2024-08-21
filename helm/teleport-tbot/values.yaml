@@ -12,6 +12,11 @@ image:
 registry:
   domain: gsoci.azurecr.io
 
+cronjob:
+  image:
+    name: "giantswarm/docker-kubectl"
+    tag: "1.31.0"
+
 teleport:
   tokenName: ""
   proxyAddr: test.teleport.giantswarm.io:443
