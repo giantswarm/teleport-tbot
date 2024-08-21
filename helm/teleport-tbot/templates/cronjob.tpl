@@ -41,9 +41,9 @@ spec:
                 cluster_name=$(kubectl get clusters.cluster.x-k8s.io -l cluster.x-k8s.io/cluster-name="$cluster_id" -A -o name)
                 if [ -z "$cluster_name" ]; then
                   echo "Cluster ${cluster_id} doesn't exist, deleting the secret."
-                  echo kubectl delete secret $secret -n $NAMESPACE
+                  {set -x; kubectl delete secret "$secret" -n "$NAMESPACE"; set +x}
                 else
-                  echo "Cluster ${cluster_id} exist, skipping secret."
+                  echo "Cluster $cluster_id exist, skipping secret."
                 fi
               done
 {{- end }}
