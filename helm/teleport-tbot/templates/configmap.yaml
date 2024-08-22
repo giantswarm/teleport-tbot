@@ -30,6 +30,8 @@ data:
       destination:
         type: kubernetes_secret
         name: {{ .Values.defaultOutput.secretName }}
+        labels:
+          app.kubernetes.io/managed-by: teleport-tbot
     {{- end }}
     {{- end }}
     {{- if .Values.outputs }}
@@ -44,10 +46,4 @@ data:
           app.kubernetes.io/managed-by: teleport-tbot
     {{- end }}
     {{- end }}
-    - type: identity
-      destination:
-        type: kubernetes_secret
-        name: teleport-identity-output
-        labels:
-          app.kubernetes.io/managed-by: teleport-tbot        
 {{- end }}
