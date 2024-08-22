@@ -18,9 +18,11 @@ Helm chart for the teleport-tbot app running in Giant Swarm clusters for interna
 
 ## Release process
 
-1. Merge you changes to main branch, ensure CHANGELOG is updated.
-2. Create release branch `main#release#VERSION` where VERSION can be `major`, `minor`, `patch`
-3. Merge the Release PR
+Please follow the standard Giant Swarm release process.
+
+1. Merge you changes to `main` branch, ensuring the CHANGELOG is updated.
+2. Create a release branch named `main#release#VERSION`, where VERSION can be `major`, `minor`, or `patch`.
+3. Merge the Release PR.
 
 ## Credit
 - https://github.com/gravitational/teleport
