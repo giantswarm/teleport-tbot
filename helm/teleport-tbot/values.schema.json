@@ -37,6 +37,22 @@
                 }
             }
         },
+        "cronjob": {
+            "type" : "object",
+            "properties": {
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        },
+                        "tag": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "teleport": {
             "type": "object",
             "properties": {
