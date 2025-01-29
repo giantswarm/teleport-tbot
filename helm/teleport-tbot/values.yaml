@@ -18,6 +18,9 @@ cronjob:
     name: "giantswarm/docker-kubectl"
     tag: "1.31.0"
 
+identity:
+  renewable: false
+
 teleport:
   tokenName: ""
   proxyAddr: test.teleport.giantswarm.io:443

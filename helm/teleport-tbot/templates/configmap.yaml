@@ -22,6 +22,10 @@ data:
     # ensure this is configured to the address of your Teleport Proxy or
     # Auth Server. Prefer the address of the Teleport Proxy.
     proxy_server: {{ .Values.teleport.proxyAddr }}
+    {{- if .Values.identity.renewable }}
+    identity:
+      renewable: true
+    {{- end }}
     # outputs will be filled in during the completion of an access guide.
     {{- if or (.Values.defaultOutput.enabled) (.Values.outputs) }}
     outputs:

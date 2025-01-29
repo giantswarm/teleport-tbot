@@ -56,6 +56,14 @@
                 }
             }
         },
+        "identity": {
+            "type": "object",
+            "properties": {
+                "renewable": {
+                    "type": "boolean"
+                }
+            }
+        },
         "teleport": {
             "type": "object",
             "properties": {
