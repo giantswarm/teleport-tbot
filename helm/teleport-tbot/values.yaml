@@ -22,7 +22,7 @@ teleport:
   tokenName: ""
   proxyAddr: test.teleport.giantswarm.io:443
   teleportClusterName: test.teleport.giantswarm.io
-  teleportVersion: 16.1.4
+  teleportVersion: 18.4.0
 
 pod:
   user:
