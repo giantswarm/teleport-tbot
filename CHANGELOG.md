@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.1] - 2026-02-25
+
 ### Added
 
 - Add `io.giantswarm.application.audience` and `io.giantswarm.application.managed` chart annotations for Backstage visibility.
@@ -125,7 +127,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - added: initial commits for teleport-tbot
 
-[Unreleased]: https://github.com/giantswarm/teleport-tbot/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/giantswarm/teleport-tbot/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/giantswarm/teleport-tbot/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/giantswarm/teleport-tbot/compare/v0.3.1...v0.4.0
 [0.3.1]: https://github.com/giantswarm/teleport-tbot/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/giantswarm/teleport-tbot/compare/v0.2.0...v0.3.0
