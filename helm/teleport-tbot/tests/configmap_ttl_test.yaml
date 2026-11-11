@@ -1,0 +1,124 @@
+suite: configmap tbot credential TTL
+templates:
+  - templates/configmap.yaml
+set:
+  enabled: true
+  teleport.tokenName: mc
+tests:
+  - it: defaults to credential_ttl 24h
+    asserts:
+      - matchRegex:
+          path: data["tbot.yaml"]
+          pattern: '(?m)^credential_ttl: 24h$'
+      - notMatchRegex:
+          path: data["tbot.yaml"]
+          pattern: 'certificate_ttl'
+  - it: honours the legacy value
+    set:
+      certificate_ttl: 6h
+    asserts:
+      - matchRegex:
+          path: data["tbot.yaml"]
+          pattern: '(?m)^credential_ttl: 6h$'
+  - it: uses the new value
+    set:
+      credential_ttl: 8h
+    asserts:
+      - matchRegex:
+          path: data["tbot.yaml"]
+          pattern: '(?m)^credential_ttl: 8h$'
+  - it: new value wins over legacy
+    set:
+      credential_ttl: 8h
+      certificate_ttl: 6h
+    asserts:
+      - matchRegex:
+          path: data["tbot.yaml"]
+          pattern: '(?m)^credential_ttl: 8h$'
+  - it: keeps certificate_ttl for tbot 16
+    set:
+      teleport.teleportVersion: 16.5.0
+    asserts:
+      - matchRegex:
+          path: data["tbot.yaml"]
+          pattern: '(?m)^certificate_ttl: 24h$'
+      - notMatchRegex:
+          path: data["tbot.yaml"]
+          pattern: 'credential_ttl'
+  - it: keeps certificate_ttl below 17.3.0
+    set:
+      teleport.teleportVersion: 17.2.9
+    asserts:
+      - matchRegex:
+          path: data["tbot.yaml"]
+          pattern: '(?m)^certificate_ttl: 24h$'
+  - it: switches at 17.3.0
+    set:
+      teleport.teleportVersion: 17.3.0
+    asserts:
+      - matchRegex:
+          path: data["tbot.yaml"]
+          pattern: '(?m)^credential_ttl: 24h$'
+  - it: strips a v prefix
+    set:
+      teleport.teleportVersion: v16.4.0
+    asserts:
+      - matchRegex:
+          path: data["tbot.yaml"]
+          pattern: '(?m)^certificate_ttl: 24h$'
+  - it: tolerates a non-semver tag
+    set:
+      teleport.teleportVersion: latest
+    asserts:
+      - matchRegex:
+          path: data["tbot.yaml"]
+          pattern: '(?m)^credential_ttl: 24h$'
+  - it: ignores a digest suffix
+    set:
+      teleport.teleportVersion: "18.4.0@sha256:abc"
+    asserts:
+      - matchRegex:
+          path: data["tbot.yaml"]
+          pattern: '(?m)^credential_ttl: 24h$'
+  - it: keeps certificate_ttl for a pre-release below 17.3.0
+    set:
+      teleport.teleportVersion: "17.2.9-rc.1"
+    asserts:
+      - matchRegex:
+          path: data["tbot.yaml"]
+          pattern: '(?m)^certificate_ttl: 24h$'
+  - it: switches at a 17.3.0 pre-release
+    set:
+      teleport.teleportVersion: "17.3.0-rc.1"
+    asserts:
+      - matchRegex:
+          path: data["tbot.yaml"]
+          pattern: '(?m)^credential_ttl: 24h$'
+  - it: ignores an underscore suffix
+    set:
+      teleport.teleportVersion: "17.2.0_foo"
+    asserts:
+      - matchRegex:
+          path: data["tbot.yaml"]
+          pattern: '(?m)^certificate_ttl: 24h$'
+  - it: ignores a fourth version component
+    set:
+      teleport.teleportVersion: "1.2.3.4"
+    asserts:
+      - matchRegex:
+          path: data["tbot.yaml"]
+          pattern: '(?m)^certificate_ttl: 24h$'
+  - it: strips a v prefix below 17.3.0
+    set:
+      teleport.teleportVersion: "v16.4.0"
+    asserts:
+      - matchRegex:
+          path: data["tbot.yaml"]
+          pattern: '(?m)^certificate_ttl: 24h$'
+  - it: strips a v prefix at 17.3.0
+    set:
+      teleport.teleportVersion: "v17.3.0"
+    asserts:
+      - matchRegex:
+          path: data["tbot.yaml"]
+          pattern: '(?m)^credential_ttl: 24h$'

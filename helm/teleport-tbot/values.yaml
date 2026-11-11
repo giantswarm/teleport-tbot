@@ -53,7 +53,11 @@ containerSecurityContext:
       - ALL
 
 renewal_interval: "20m"
-certificate_ttl: "24h"
+# Lifetime tbot requests for its credentials (the server may cap it). Defaults to 24h when empty. Replaces the
+# deprecated certificate_ttl, which is still honoured when credential_ttl is empty.
+credential_ttl: ""
+# Deprecated: use credential_ttl.
+# certificate_ttl: ""
 
 # Controls the default output configured for the tbot agent.
 defaultOutput:
