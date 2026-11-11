@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Render tbot's `credential_ttl` instead of the deprecated `certificate_ttl` (kept for tbot images older than 17.3.0). New value `credential_ttl`; `certificate_ttl` is still honoured when `credential_ttl` is empty.
+- Render tbot's `credential_ttl` instead of the deprecated `certificate_ttl`. This requires tbot 17.3.0 or newer (`teleport.teleportVersion`): an older tbot refuses to start on the new key. New value `credential_ttl`; `certificate_ttl` is still honoured when `credential_ttl` is empty.
 
 ### Deprecated
 
