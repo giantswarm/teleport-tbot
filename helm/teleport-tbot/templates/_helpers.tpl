@@ -32,3 +32,10 @@ Selector labels
 app.kubernetes.io/name: {{ include "name" . | quote }}
 app.kubernetes.io/instance: {{ .Release.Name | quote }}
 {{- end -}}
+
+{{/*
+Credential lifetime: credential_ttl, else the deprecated certificate_ttl, else 24h.
+*/}}
+{{- define "teleport-tbot.credentialTTL" -}}
+{{- .Values.credential_ttl | default .Values.certificate_ttl | default "24h" -}}
+{{- end -}}

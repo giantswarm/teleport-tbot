@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Render tbot's `credential_ttl` instead of the deprecated `certificate_ttl`. This requires tbot 17.3.0 or newer (`teleport.teleportVersion`): an older tbot refuses to start on the new key. New value `credential_ttl`; `certificate_ttl` is still honoured when `credential_ttl` is empty.
+
+### Deprecated
+
+- The `certificate_ttl` value is deprecated in favour of `credential_ttl`.
+
 ### Removed
 
 - The old inline `zz_generated.update_chart.yaml`: it pushed with the shared taylorbot token, align-files does not manage it (no `installUpdateChart` in the team-file entry) and it never ran. Syncing the chart by hand stays as it is (giantswarm/giantswarm#2280).

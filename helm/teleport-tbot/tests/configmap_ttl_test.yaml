@@ -1,0 +1,47 @@
+suite: configmap tbot credential TTL
+templates:
+  - templates/configmap.yaml
+set:
+  enabled: true
+  teleport.tokenName: mc
+tests:
+  - it: defaults to credential_ttl 24h
+    asserts:
+      - matchRegex:
+          path: data["tbot.yaml"]
+          pattern: '(?m)^credential_ttl: 24h$'
+      - notMatchRegex:
+          path: data["tbot.yaml"]
+          pattern: 'certificate_ttl'
+  - it: honours the legacy value
+    set:
+      certificate_ttl: 6h
+    asserts:
+      - matchRegex:
+          path: data["tbot.yaml"]
+          pattern: '(?m)^credential_ttl: 6h$'
+  - it: uses the new value
+    set:
+      credential_ttl: 8h
+    asserts:
+      - matchRegex:
+          path: data["tbot.yaml"]
+          pattern: '(?m)^credential_ttl: 8h$'
+  - it: new value wins over legacy
+    set:
+      credential_ttl: 8h
+      certificate_ttl: 6h
+    asserts:
+      - matchRegex:
+          path: data["tbot.yaml"]
+          pattern: '(?m)^credential_ttl: 8h$'
+  - it: renders credential_ttl whatever the tbot version
+    set:
+      teleport.teleportVersion: 16.5.0
+    asserts:
+      - matchRegex:
+          path: data["tbot.yaml"]
+          pattern: '(?m)^credential_ttl: 24h$'
+      - notMatchRegex:
+          path: data["tbot.yaml"]
+          pattern: certificate_ttl
