@@ -168,6 +168,22 @@
         },
         "credential_ttl": {
             "type": "string"
+        },
+        "architecture": {
+            "type": "string",
+            "enum": ["", "amd64", "arm64"]
+        },
+        "nodeSelector": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "string"
+            }
+        },
+        "tolerations": {
+            "type": "array",
+            "items": {
+                "type": "object"
+            }
         }
     }
 }

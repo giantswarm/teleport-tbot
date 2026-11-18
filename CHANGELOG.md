@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add `architecture`, `nodeSelector` and `tolerations` values so the tbot Deployment and the kubeconfig cleanup CronJob can run on arm64 node pools.
+
+### Changed
+
+- Bump the cleanup CronJob's `docker-kubectl` image from 1.31.0 (amd64-only) to the multi-arch 1.36.4.
+
 ## [0.5.0] - 2026-11-14
 
 ### Changed

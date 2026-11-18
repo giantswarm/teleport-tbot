@@ -21,6 +21,9 @@ spec:
         # ConfigMap checksum, to recreate the pod on config changes.
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
     spec:
+      {{- with include "teleport-tbot.podScheduling" . }}
+      {{- . | nindent 6 }}
+      {{- end }}
       securityContext:
         runAsUser: {{ .Values.pod.user.id }}
         runAsGroup: {{ .Values.pod.group.id }}

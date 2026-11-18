@@ -15,6 +15,9 @@ spec:
           labels:
             app.kubernetes.io/name: tbot
         spec:
+          {{- with include "teleport-tbot.podScheduling" . }}
+          {{- . | nindent 10 }}
+          {{- end }}
           serviceAccountName: {{ include "resource.default.name"  . }}
           securityContext:
             runAsUser: {{ .Values.pod.user.id }}

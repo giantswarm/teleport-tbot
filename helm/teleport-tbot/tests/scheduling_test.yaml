@@ -1,0 +1,251 @@
+suite: pod scheduling and the architecture value
+templates:
+  - templates/deployment.yaml
+  # The Deployment's checksum annotation includes the ConfigMap.
+  - templates/configmap.yaml
+  - templates/cronjob.tpl
+set:
+  enabled: true
+  teleport.tokenName: mc
+tests:
+  - it: renders no scheduling fields by default
+    template: templates/deployment.yaml
+    # Guards backwards compatibility: an unset architecture must not add a
+    # nodeSelector or tolerations, so bumping the chart causes no pod churn.
+    asserts:
+      - notExists:
+          path: spec.template.spec.nodeSelector
+      - notExists:
+          path: spec.template.spec.tolerations
+
+  - it: pins to arm64 with both the node selector and the taint toleration
+    template: templates/deployment.yaml
+    # The arm64 pool is tainted, so the selector alone would leave the pod
+    # Pending and the toleration alone would let it land on any pool.
+    set:
+      architecture: arm64
+    asserts:
+      - equal:
+          path: spec.template.spec.nodeSelector["kubernetes.io/arch"]
+          value: arm64
+      - contains:
+          path: spec.template.spec.tolerations
+          content:
+            key: kubernetes.io/arch
+            operator: Equal
+            value: arm64
+            effect: NoSchedule
+      - lengthEqual:
+          path: spec.template.spec.tolerations
+          count: 1
+
+  - it: pins to amd64 with the selector only, as amd64 pools carry no taint
+    template: templates/deployment.yaml
+    set:
+      architecture: amd64
+    asserts:
+      - equal:
+          path: spec.template.spec.nodeSelector["kubernetes.io/arch"]
+          value: amd64
+      - notExists:
+          path: spec.template.spec.tolerations
+
+  - it: merges architecture with explicit nodeSelector and tolerations
+    template: templates/deployment.yaml
+    set:
+      architecture: arm64
+      nodeSelector:
+        disktype: ssd
+      tolerations:
+        - key: dedicated
+          operator: Exists
+          effect: NoSchedule
+    asserts:
+      - equal:
+          path: spec.template.spec.nodeSelector["kubernetes.io/arch"]
+          value: arm64
+      - equal:
+          path: spec.template.spec.nodeSelector.disktype
+          value: ssd
+      - lengthEqual:
+          path: spec.template.spec.tolerations
+          count: 2
+      - contains:
+          path: spec.template.spec.tolerations
+          content:
+            key: dedicated
+            operator: Exists
+            effect: NoSchedule
+
+  - it: fails when nodeSelector contradicts architecture
+    template: templates/deployment.yaml
+    # A contradiction is a mistake, not a preference to arbitrate: architecture
+    # also decides the toleration, so silently picking a winner would render
+    # something neither setting asked for.
+    set:
+      architecture: arm64
+      nodeSelector:
+        kubernetes.io/arch: amd64
+    asserts:
+      - failedTemplate:
+          errorPattern: 'architecture=arm64 conflicts with nodeSelector\."kubernetes\.io/arch"=amd64; set only one'
+
+  - it: accepts a nodeSelector that agrees with architecture
+    template: templates/deployment.yaml
+    set:
+      architecture: arm64
+      nodeSelector:
+        kubernetes.io/arch: arm64
+    asserts:
+      - equal:
+          path: spec.template.spec.nodeSelector["kubernetes.io/arch"]
+          value: arm64
+      - lengthEqual:
+          path: spec.template.spec.tolerations
+          count: 1
+
+  - it: renders nodeSelector without architecture
+    template: templates/deployment.yaml
+    set:
+      nodeSelector:
+        disktype: ssd
+    asserts:
+      - equal:
+          path: spec.template.spec.nodeSelector.disktype
+          value: ssd
+      - notExists:
+          path: spec.template.spec.nodeSelector["kubernetes.io/arch"]
+      - notExists:
+          path: spec.template.spec.tolerations
+
+  - it: does not emit the arm64 toleration twice when it is already set
+    template: templates/deployment.yaml
+    set:
+      architecture: arm64
+      tolerations:
+        - key: kubernetes.io/arch
+          operator: Equal
+          value: arm64
+          effect: NoSchedule
+    asserts:
+      - lengthEqual:
+          path: spec.template.spec.tolerations
+          count: 1
+
+  - it: adds the toleration when arm64 is pinned through nodeSelector alone
+    template: templates/deployment.yaml
+    # The coupling must hold whichever value sets the architecture. Without
+    # this the pod gets the selector, no toleration, and stays Pending against
+    # the tainted arm64 pool with no render error.
+    set:
+      nodeSelector:
+        kubernetes.io/arch: arm64
+    asserts:
+      - equal:
+          path: spec.template.spec.nodeSelector["kubernetes.io/arch"]
+          value: arm64
+      - contains:
+          path: spec.template.spec.tolerations
+          content:
+            key: kubernetes.io/arch
+            operator: Equal
+            value: arm64
+            effect: NoSchedule
+
+  - it: adds no toleration when amd64 is pinned through nodeSelector alone
+    template: templates/deployment.yaml
+    set:
+      nodeSelector:
+        kubernetes.io/arch: amd64
+    asserts:
+      - equal:
+          path: spec.template.spec.nodeSelector["kubernetes.io/arch"]
+          value: amd64
+      - notExists:
+          path: spec.template.spec.tolerations
+
+  - it: treats an Exists toleration as already covering the taint
+    template: templates/deployment.yaml
+    set:
+      architecture: arm64
+      tolerations:
+        - key: kubernetes.io/arch
+          operator: Exists
+          effect: NoSchedule
+    asserts:
+      - lengthEqual:
+          path: spec.template.spec.tolerations
+          count: 1
+
+  - it: treats an omitted operator as Equal, per the API default
+    template: templates/deployment.yaml
+    set:
+      architecture: arm64
+      tolerations:
+        - key: kubernetes.io/arch
+          value: arm64
+          effect: NoSchedule
+    asserts:
+      - lengthEqual:
+          path: spec.template.spec.tolerations
+          count: 1
+
+  - it: still adds the toleration when an existing one tolerates amd64 instead
+    template: templates/deployment.yaml
+    # Shares key and effect but does not tolerate the arm64 taint, so matching
+    # on key+effect alone would wrongly drop a toleration the pod needs.
+    set:
+      architecture: arm64
+      tolerations:
+        - key: kubernetes.io/arch
+          operator: Equal
+          value: amd64
+          effect: NoSchedule
+    asserts:
+      - lengthEqual:
+          path: spec.template.spec.tolerations
+          count: 2
+      - contains:
+          path: spec.template.spec.tolerations
+          content:
+            key: kubernetes.io/arch
+            operator: Equal
+            value: arm64
+            effect: NoSchedule
+
+  - it: rejects an unknown architecture
+    template: templates/deployment.yaml
+    set:
+      architecture: aarch64
+    asserts:
+      - failedTemplate:
+          errorPattern: architecture
+
+  - it: applies the same constraints to the cleanup CronJob
+    # The CronJob runs on the same cluster as the Deployment, so an arm64-only
+    # cluster needs both pinned; otherwise its hourly pods stay Pending.
+    template: templates/cronjob.tpl
+    set:
+      cronjob.enabled: true
+      architecture: arm64
+    asserts:
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.nodeSelector["kubernetes.io/arch"]
+          value: arm64
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.tolerations
+          content:
+            key: kubernetes.io/arch
+            operator: Equal
+            value: arm64
+            effect: NoSchedule
+
+  - it: renders no CronJob scheduling fields by default
+    template: templates/cronjob.tpl
+    set:
+      cronjob.enabled: true
+    asserts:
+      - notExists:
+          path: spec.jobTemplate.spec.template.spec.nodeSelector
+      - notExists:
+          path: spec.jobTemplate.spec.template.spec.tolerations

@@ -16,7 +16,7 @@ cronjob:
   enabled: false
   image:
     name: "giantswarm/docker-kubectl"
-    tag: "1.31.0"
+    tag: "1.36.4"
 
 teleport:
   tokenName: ""
@@ -69,3 +69,12 @@ defaultOutput:
 # outputs:
 #   golem: "golem"
 #   golem-demo: "demo"
+
+# -- CPU architecture of nodes to schedule on; empty means any.
+architecture: ""
+
+# -- Node selector for pod scheduling. Merged with `architecture`.
+nodeSelector: {}
+
+# -- Tolerations for pod scheduling
+tolerations: []
