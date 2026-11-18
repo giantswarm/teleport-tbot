@@ -70,20 +70,11 @@ defaultOutput:
 #   golem: "golem"
 #   golem-demo: "demo"
 
-# Target CPU architecture for the tbot Deployment and the cleanup CronJob. Empty
-# imposes no constraint. `arm64` pins the pods to arm64 nodes, adding both the
-# `kubernetes.io/arch` node selector and the toleration for the
-# `kubernetes.io/arch=arm64:NoSchedule` taint that Giant Swarm arm64 node pools
-# carry. Both are required, so this single value sets both. Requires multi-arch
-# container images; the default tbot-distroless and docker-kubectl images are.
-# An amd64-only image will crash-loop with `exec format error` on an arm64 node.
+# -- CPU architecture of nodes to schedule on; empty means any.
 architecture: ""
 
-# Node selector for pod scheduling. Merged with `architecture`. Pinning to arm64
-# here rather than through `architecture` also adds the arm64 taint toleration,
-# so either route is safe. A value that contradicts `architecture` fails the
-# render.
+# -- Node selector for pod scheduling. Merged with `architecture`.
 nodeSelector: {}
 
-# Tolerations for pod scheduling.
+# -- Tolerations for pod scheduling
 tolerations: []
